@@ -37,6 +37,42 @@ class BatchSpec extends Specification {
         batch == ['Page 1', 'Page 2']
     }
 
+    def 'puts batch with 3 pages into correct order'() {
+        given:
+        batch.addAll(['Page 1', 'Page 3', 'Page 2'])
+        when:
+        batch.simplex2Duplex()
+        then:
+        batch == ['Page 1', 'Page 2', 'Page 3']
+    }
+
+    def 'puts batch with 4 pages into correct order'() {
+        given:
+        batch.addAll(['Page 1', 'Page 3', 'Page 4', 'Page 2'])
+        when:
+        batch.simplex2Duplex()
+        then:
+        batch == ['Page 1', 'Page 2', 'Page 3', 'Page 4']
+    }
+
+    def 'puts batch with 5 pages into correct order'() {
+        given:
+        batch.addAll(['Page 1', 'Page 3', 'Page 5', 'Page 4', 'Page 2'])
+        when:
+        batch.simplex2Duplex()
+        then:
+        batch == ['Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5']
+    }
+
+    def 'puts batch with 6 pages into correct order'() {
+        given:
+        batch.addAll(['Page 1', 'Page 3', 'Page 5', 'Page 6', 'Page 4', 'Page 2'])
+        when:
+        batch.simplex2Duplex()
+        then:
+        batch == ['Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5', 'Page 6']
+    }
+
 }
 
 class TestBatch extends LinkedList<String> implements Batch<String> {
