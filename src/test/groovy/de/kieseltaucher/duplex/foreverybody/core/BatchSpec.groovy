@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class BatchSpec extends Specification {
 
-    def batch = new TestBatch()
+    def batch = new LinkedList<String>() as Batch<String>
 
     def 'preconditions'() {
         expect:
@@ -72,9 +72,5 @@ class BatchSpec extends Specification {
         then:
         batch == ['Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5', 'Page 6']
     }
-
-}
-
-class TestBatch extends LinkedList<String> implements Batch<String> {
 
 }
