@@ -34,8 +34,8 @@ trait Batch<T> {
 
         final int idxBackPages = (size + (odd ? 1 : 0)) / 2
 
-        int insertIdx = idxBackPages - 1
         int removeIdx = idxBackPages + (odd ? 0 : 1)
+        int insertIdx = idxBackPages - 1
         while(removeIdx < size) {
             def evenPage = remove(removeIdx)
             add(insertIdx, evenPage)
