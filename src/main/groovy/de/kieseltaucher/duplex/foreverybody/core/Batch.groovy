@@ -25,7 +25,7 @@ trait Batch<T> {
          *
          * The index of the first even page is 2.
          *
-         * The algorithm does not needs to move the page at index 2 (Page 4).
+         * The algorithm does not need to move the page at index 2 (Page 4).
          * It is the last page, and may stay after Page 3.
          * But it needs to move all subsequent pages.
          * In this example it needs to move the page at index 3 (Page 2)
