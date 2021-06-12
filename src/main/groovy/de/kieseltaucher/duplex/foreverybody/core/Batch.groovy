@@ -8,8 +8,8 @@ trait Batch<T> {
 
     void simplex2Duplex() {
 
-        final int size = size()
-        final boolean odd = size % 2 == 1
+        final int pageCount = size()
+        final boolean oddPageCount = pageCount % 2 == 1
 
         /*
          * Given there is a scan with five pages (an odd number):
@@ -32,11 +32,11 @@ trait Batch<T> {
          * to index 1 (after Page 1).
          */
 
-        final int idxBackPages = (size + (odd ? 1 : 0)) / 2
+        final int firstIdxBackPages = (pageCount + (oddPageCount ? 1 : 0)) / 2
 
-        int removeIdx = idxBackPages + (odd ? 0 : 1)
-        int insertIdx = idxBackPages - 1
-        while(removeIdx < size) {
+        int removeIdx = firstIdxBackPages + (oddPageCount ? 0 : 1)
+        int insertIdx = firstIdxBackPages - 1
+        while(removeIdx < pageCount) {
             def evenPage = remove(removeIdx)
             add(insertIdx, evenPage)
             ++removeIdx
