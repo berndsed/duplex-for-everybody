@@ -7,6 +7,7 @@ trait Batch<T> {
     abstract int size();
 
     void simplex2Duplex() {
+
         final int size = size()
         final boolean odd = size % 2 == 1
 
@@ -30,7 +31,6 @@ trait Batch<T> {
          *
          * But it needs to move all subsequent pages.
          * In this example it needs to move the page at index 3 (Page 2) to index 1 (after Page 1).
-         *
          */
 
         final int idxBackPages = (size + (odd ? 1 : 0)) / 2

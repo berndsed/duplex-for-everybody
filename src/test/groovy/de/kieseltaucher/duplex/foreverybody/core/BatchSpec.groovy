@@ -12,6 +12,7 @@ class BatchSpec extends Specification {
     }
 
     def 'batches in correct order do not change'() {
+
         when:
         batch.simplex2Duplex()
         then:
