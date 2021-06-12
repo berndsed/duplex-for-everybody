@@ -13,7 +13,6 @@ trait Batch<T> {
 
         /*
          * Given there is a scan with five pages (an odd number):
-         *
          * [Page 1, Page 3, Page 5, Page 4, Page 2]
          *
          * The index of the first even page is 3.
@@ -28,9 +27,9 @@ trait Batch<T> {
          *
          * The algorithm does not needs to move the page at index 2 (Page 4).
          * It is the last page, and may stay after Page 3.
-         *
          * But it needs to move all subsequent pages.
-         * In this example it needs to move the page at index 3 (Page 2) to index 1 (after Page 1).
+         * In this example it needs to move the page at index 3 (Page 2)
+         * to index 1 (after Page 1).
          */
 
         final int idxBackPages = (size + (odd ? 1 : 0)) / 2
