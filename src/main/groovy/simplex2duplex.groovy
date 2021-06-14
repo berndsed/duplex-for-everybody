@@ -1,7 +1,5 @@
-import de.kieseltaucher.duplex.foreverybody.core.Batch
+import de.kieseltaucher.duplex.foreverybody.service.BatchService
 
-def batch = new LinkedList() as Batch<String>
-batch.addAll System.in.getText().split()
-batch.simplex2Duplex()
-
-System.out.println batch.join(" ")
+def service = new BatchService()
+service.simplex2Duplex(System.in, System.out)
+System.out.println()
