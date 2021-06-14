@@ -5,6 +5,15 @@ plugins {
 group 'de.kieseltaucher.duplex.scan.for.everybody'
 version '1.0-SNAPSHOT'
 
+task asGroovyScript(type: Zip) {
+    description 'Creates a distribution containing a groovy script'
+    group 'distribution'
+    
+    from compileGroovy
+    from layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
+    archiveName = "${project.name}-groovy-script-${project.version}.zip"
+}
+
 repositories {
     mavenCentral()
 }
