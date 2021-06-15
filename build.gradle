@@ -14,12 +14,23 @@ task asGroovyScript(type: Zip) {
     archiveName = "${project.name}-groovy-script-${project.version}.zip"
 }
 
+task asAwsLambda(type: Zip) {
+    description 'Creates an aws lambda deployment package'
+    group 'distribution'
+
+    from compileGroovy
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+    archiveName = "${project.name}-aws-lambda-${project.version}.zip"
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.5.8'
+    compile 'org.codehaus.groovy:groovy:2.5.8'
     compile 'com.amazonaws:aws-lambda-java-core:1.2.1'
     testCompile 'org.spockframework:spock-core:1.3-groovy-2.5'
 }
