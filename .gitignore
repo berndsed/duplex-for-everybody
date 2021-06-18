@@ -4,3 +4,6 @@ build/
 *.iml
 .DS_Store
 .gradle/
+
+# User specific files
+my-*
