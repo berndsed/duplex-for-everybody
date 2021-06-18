@@ -3,6 +3,7 @@ package de.kieseltaucher.duplex.foreverybody.app.aws
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import de.kieseltaucher.duplex.foreverybody.service.BatchService
+import groovy.json.JsonOutput
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 
@@ -34,7 +35,10 @@ class AWSLambdaHandler implements RequestStreamHandler {
     }
 
     private void writeResponse(String duplex, OutputStream target) {
-        def apiGatewayResponse = '{"headers": {"content-type": "text/plain"}, "body":"' + duplex + '"}'
+        def apiGatewayResponse = JsonOutput.toJson([
+                'headers': ['content-type': 'text/plain'],
+                'body'   : duplex
+        ])
         def writer = new OutputStreamWriter(target)
         writer.write(apiGatewayResponse)
         writer.close()
