@@ -26,7 +26,7 @@ class AWSLambdaHandlerSpec extends Specification {
         then:
         response.get('headers') == ['content-type': 'application/pdf']
         response.get('isBase64Encoded')
-        pagesOfBody(response.get('body')) == []
+        pagesOfBody(response.get('body') as String) == []
     }
 
     def 'sorts batch'() {
@@ -37,7 +37,7 @@ class AWSLambdaHandlerSpec extends Specification {
         def result = doRequest()
         then:
         result.get('body') != ''
-        pagesOfBody(result.get('body')) == [1, 2, 3]
+        pagesOfBody(result.get('body') as String) == [1, 2, 3]
     }
 
     private Map doRequest() {
@@ -47,7 +47,8 @@ class AWSLambdaHandlerSpec extends Specification {
         handler.handleRequest(new ByteArrayInputStream(httpApiRequest.bytes), out, new Object() as ContextStub)
         def resultReader = new InputStreamReader(new ByteArrayInputStream(out.toByteArray()))
         def parser = new JsonSlurper()
-        parser.parseText resultReader.text
+        def parsed = parser.parseText resultReader.text
+        parsed as Map
     }
 
     private List<Integer> pagesOfBody(String body) {
