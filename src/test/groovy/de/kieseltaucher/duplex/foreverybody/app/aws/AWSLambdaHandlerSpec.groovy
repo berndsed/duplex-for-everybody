@@ -25,6 +25,7 @@ class AWSLambdaHandlerSpec extends Specification {
 
         then:
         response.get('headers') == ['content-type': 'application/pdf']
+        response.get('isBase64Encoded')
         pagesOfBody(response.get('body')) == []
     }
 

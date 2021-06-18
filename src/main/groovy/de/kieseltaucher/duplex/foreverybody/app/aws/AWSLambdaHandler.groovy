@@ -37,7 +37,8 @@ class AWSLambdaHandler implements RequestStreamHandler {
     private void writeResponse(byte[] duplex, OutputStream target) {
         def apiGatewayResponse = JsonOutput.toJson([
                 'headers': ['content-type': 'application/pdf'],
-                'body'   : base64Encoder.encodeToString(duplex)
+                'body'   : base64Encoder.encodeToString(duplex),
+                'isBase64Encoded': true
         ])
         def writer = new OutputStreamWriter(target)
         writer.write(apiGatewayResponse)
