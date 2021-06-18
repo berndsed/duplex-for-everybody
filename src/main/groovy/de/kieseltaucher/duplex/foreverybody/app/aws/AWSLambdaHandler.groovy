@@ -8,6 +8,7 @@ import groovy.json.JsonSlurper
 class AWSLambdaHandler implements RequestStreamHandler {
 
     private final BatchService service = new BatchService()
+    private final JsonSlurper jsonParser = new JsonSlurper()
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
@@ -17,7 +18,6 @@ class AWSLambdaHandler implements RequestStreamHandler {
     }
 
     private String parseRequestBody(InputStream input) {
-        def jsonParser = new JsonSlurper()
         def apiGatewayRequest = jsonParser.parse(input) as Map
         apiGatewayRequest.get('body') as String
     }
