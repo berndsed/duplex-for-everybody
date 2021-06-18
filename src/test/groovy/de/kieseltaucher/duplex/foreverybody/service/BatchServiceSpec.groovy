@@ -29,25 +29,21 @@ class BatchServiceSpec extends Specification {
     }
 
     def simplex2Duplex() {
-        def out = new ByteArrayOutputStream()
-        service.simplex2Duplex(inputBuilder.build(), out)
-        return new ByteArrayInputStream(out.toByteArray())
-                .withReader { reader -> reader.text.split().collect { Integer.parseInt(it) } }
+        def duplexPdf = new TestPDF()
+        service.simplex2Duplex(inputBuilder.build(), duplexPdf.loader())
+        return duplexPdf.pages()
     }
 }
 
 class InputBuilder {
 
-    String data = ""
+    TestPDF data = new TestPDF()
 
     void addPage(int number) {
-        if (!data.isEmpty()) {
-            data += " "
-        }
-        data += Integer.toString(number)
+        data.addPage number
     }
 
     InputStream build() {
-        new ByteArrayInputStream(data.getBytes())
+        data.binary()
     }
 }

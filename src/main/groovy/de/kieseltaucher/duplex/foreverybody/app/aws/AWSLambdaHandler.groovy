@@ -11,6 +11,8 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     private final BatchService service = new BatchService()
     private final JsonSlurper jsonParser = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY)
+    private final Base64.Decoder base64Decoder = Base64.getDecoder()
+    private final Base64.Encoder base64Encoder = Base64.getEncoder()
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
@@ -19,25 +21,23 @@ class AWSLambdaHandler implements RequestStreamHandler {
         writeResponse(serviceResult, output)
     }
 
-    private String parseRequestBody(InputStream input) {
+    private InputStream parseRequestBody(InputStream input) {
         def apiGatewayRequest = jsonParser.parse(input) as Map
-        apiGatewayRequest.get('body') as String
+        def base64Body = apiGatewayRequest.get('body') as String
+        def data = base64Decoder.decode base64Body
+        new ByteArrayInputStream(data)
     }
 
-    private String simplex2Duplex(String simplex) {
-        def serviceIn = new ByteArrayInputStream(simplex.bytes)
+    private byte[] simplex2Duplex(InputStream simplex) {
         def serviceOut = new ByteArrayOutputStream()
-
-        service.simplex2Duplex(serviceIn, serviceOut)
-
-        def serviceResult = new InputStreamReader(new ByteArrayInputStream(serviceOut.toByteArray())).text
-        serviceResult
+        service.simplex2Duplex(simplex, serviceOut)
+        serviceOut.toByteArray()
     }
 
-    private void writeResponse(String duplex, OutputStream target) {
+    private void writeResponse(byte[] duplex, OutputStream target) {
         def apiGatewayResponse = JsonOutput.toJson([
-                'headers': ['content-type': 'text/plain'],
-                'body'   : duplex
+                'headers': ['content-type': 'application/pdf'],
+                'body'   : base64Encoder.encodeToString(duplex)
         ])
         def writer = new OutputStreamWriter(target)
         writer.write(apiGatewayResponse)
