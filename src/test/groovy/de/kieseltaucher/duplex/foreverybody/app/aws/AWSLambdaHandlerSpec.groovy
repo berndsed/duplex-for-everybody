@@ -36,7 +36,6 @@ class AWSLambdaHandlerSpec extends Specification {
         data.addPage(2)
         def result = doRequest()
         then:
-        result.get('body') != ''
         pagesOfBody(result) == [1, 2, 3]
     }
 
