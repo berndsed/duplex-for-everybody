@@ -3,12 +3,13 @@ package de.kieseltaucher.duplex.foreverybody.app.aws
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import de.kieseltaucher.duplex.foreverybody.service.BatchService
+import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 
 class AWSLambdaHandler implements RequestStreamHandler {
 
     private final BatchService service = new BatchService()
-    private final JsonSlurper jsonParser = new JsonSlurper()
+    private final JsonSlurper jsonParser = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY)
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
