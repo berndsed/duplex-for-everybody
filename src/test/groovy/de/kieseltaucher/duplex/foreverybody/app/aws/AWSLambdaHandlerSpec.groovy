@@ -37,7 +37,7 @@ class AWSLambdaHandlerSpec extends Specification {
         def result = doRequest()
         then:
         result.get('body') != ''
-        pagesOfBody(result.get('body')) == [1, 2 , 3]
+        pagesOfBody(result.get('body')) == [1, 2, 3]
     }
 
     private Map doRequest() {
