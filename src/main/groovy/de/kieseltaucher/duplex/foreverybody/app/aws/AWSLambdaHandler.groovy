@@ -18,7 +18,7 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     private String parseRequestBody(InputStream input) {
         def jsonParser = new JsonSlurper()
-        def apiGatewayRequest = jsonParser.parse(new InputStreamReader(input)) as Map
+        def apiGatewayRequest = jsonParser.parse(input) as Map
         apiGatewayRequest.get('body') as String
     }
 
