@@ -11,11 +11,11 @@ class PDFBoxBatch implements Batch<PDPage> {
         new PDFBoxBatch(document)
     }
 
-    private final PDDocument originalDocument
+    private final PDDocument simplex
     private final List<PDPage> pages
 
     private PDFBoxBatch(PDDocument document) {
-        this.originalDocument = document
+        this.simplex = document
         this.pages = new LinkedList<>()
         def iterator = document.pages.iterator()
         while(iterator.hasNext()) {
@@ -43,5 +43,6 @@ class PDFBoxBatch implements Batch<PDPage> {
         pages.forEach {document.addPage it}
         document.save target
         document.close()
+        simplex.close()
     }
 }
