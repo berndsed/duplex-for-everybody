@@ -16,9 +16,9 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-        def requestBody = parseRequestBody(input)
-        def serviceResult = simplex2Duplex(requestBody)
-        writeResponse(serviceResult, output)
+        def pdfIn = parseRequestBody(input)
+        def pdfOut = simplex2Duplex(pdfIn)
+        writeResponse(pdfOut, output)
     }
 
     private byte[] parseRequestBody(InputStream input) {
