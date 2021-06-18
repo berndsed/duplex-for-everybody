@@ -26,7 +26,7 @@ class AWSLambdaHandlerSpec extends Specification {
         then:
         response.get('headers') == ['content-type': 'application/pdf']
         response.get('isBase64Encoded')
-        pagesOfBody(response.get('body') as String) == []
+        pagesOfBody(response) == []
     }
 
     def 'sorts batch'() {
@@ -37,7 +37,7 @@ class AWSLambdaHandlerSpec extends Specification {
         def result = doRequest()
         then:
         result.get('body') != ''
-        pagesOfBody(result.get('body') as String) == [1, 2, 3]
+        pagesOfBody(result) == [1, 2, 3]
     }
 
     private Map doRequest() {
@@ -53,7 +53,8 @@ class AWSLambdaHandlerSpec extends Specification {
         parsed as Map
     }
 
-    private List<Integer> pagesOfBody(String body) {
+    private List<Integer> pagesOfBody(Map json) {
+        def body = json.get('body') as String
         def pdf = new TestPDF()
 
         def loader = pdf.loader()
