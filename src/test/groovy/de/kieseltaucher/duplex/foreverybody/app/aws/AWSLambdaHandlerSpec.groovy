@@ -43,8 +43,10 @@ class AWSLambdaHandlerSpec extends Specification {
     private Map doRequest() {
         def encodedData = Base64.getEncoder().encodeToString data.binary().bytes
         def httpApiRequest = '{"body": "' + encodedData + '"}'
+
         def out = new ByteArrayOutputStream()
         handler.handleRequest(new ByteArrayInputStream(httpApiRequest.bytes), out, new Object() as ContextStub)
+
         def resultReader = new InputStreamReader(new ByteArrayInputStream(out.toByteArray()))
         def parser = new JsonSlurper()
         def parsed = parser.parseText resultReader.text
