@@ -11,21 +11,30 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
+        def requestBody = parseRequestBody(input)
+        def serviceResult = simplex2Duplex(requestBody)
+        writeResponse(serviceResult, output)
+    }
 
+    private String parseRequestBody(InputStream input) {
         def jsonParser = new JsonSlurper()
         def apiGatewayRequest = jsonParser.parse(new InputStreamReader(input)) as Map
-        def requestBody = apiGatewayRequest.get('body') as String
+        apiGatewayRequest.get('body') as String
+    }
 
-        def serviceIn = new ByteArrayInputStream(requestBody.bytes)
+    private String simplex2Duplex(String simplex) {
+        def serviceIn = new ByteArrayInputStream(simplex.bytes)
         def serviceOut = new ByteArrayOutputStream()
 
         service.simplex2Duplex(serviceIn, serviceOut)
 
         def serviceResult = new InputStreamReader(new ByteArrayInputStream(serviceOut.toByteArray())).text
+        serviceResult
+    }
 
-        def apiGatewayResponse = '{"headers": {"content-type": "text/plain"}, "body":"' + serviceResult + '"}'
-
-        def writer = new OutputStreamWriter(output)
+    private void writeResponse(String duplex, OutputStream target) {
+        def apiGatewayResponse = '{"headers": {"content-type": "text/plain"}, "body":"' + duplex + '"}'
+        def writer = new OutputStreamWriter(target)
         writer.write(apiGatewayResponse)
         writer.close()
     }
