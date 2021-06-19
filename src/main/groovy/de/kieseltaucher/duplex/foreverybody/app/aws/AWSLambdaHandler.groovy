@@ -16,11 +16,11 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-        def pdfOut = simplex2Base64Duplex(parseRequestBody(input))
+        def pdfOut = simplex2Base64Duplex(parseSimplex(input))
         writeResponse(pdfOut, output)
     }
 
-    private byte[] parseRequestBody(InputStream input) {
+    private byte[] parseSimplex(InputStream input) {
         def bufferedIn = new BufferedInputStream(input)
         try {
             def apiGatewayRequest = jsonParser.parse(input) as Map
