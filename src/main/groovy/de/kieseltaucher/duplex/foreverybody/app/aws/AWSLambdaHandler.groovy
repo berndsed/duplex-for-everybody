@@ -23,11 +23,15 @@ class AWSLambdaHandler implements RequestStreamHandler {
     }
 
     private byte[] parseSimplex(InputStream input) {
+        def apiGatewayRequest = parseJson(input)
+        def base64Body = apiGatewayRequest.get('body') as String
+        base64Decoder.decode base64Body
+    }
+
+    private Map parseJson(InputStream input) {
         def bufferedIn = new BufferedInputStream(input)
         try {
-            def apiGatewayRequest = jsonParser.parse(input) as Map
-            def base64Body = apiGatewayRequest.get('body') as String
-            base64Decoder.decode base64Body
+            jsonParser.parse(input) as Map
         } finally {
             bufferedIn.close()
         }
