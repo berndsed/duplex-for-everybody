@@ -7,6 +7,8 @@ import groovy.json.JsonOutput
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1
+
 class AWSLambdaHandler implements RequestStreamHandler {
 
     private final BatchService service = new BatchService()
@@ -32,9 +34,9 @@ class AWSLambdaHandler implements RequestStreamHandler {
     }
 
     private String simplex2Base64Duplex(byte[] simplex) {
-        def serviceOut = new ByteArrayOutputStream()
-        service.simplex2Duplex(new ByteArrayInputStream(simplex), serviceOut)
-        base64Encoder.encodeToString(serviceOut.toByteArray())
+        def base64Out = new ByteArrayOutputStream()
+        service.simplex2Duplex(new ByteArrayInputStream(simplex), base64Encoder.wrap(base64Out))
+        new String(base64Out.toByteArray(), ISO_8859_1)
     }
 
     private void writeResponse(String duplex, OutputStream target) {
