@@ -17,7 +17,7 @@ class AWSLambdaHandler implements RequestStreamHandler {
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
         def pdfIn = parseRequestBody(input)
-        def pdfOut = simplex2Duplex(pdfIn)
+        def pdfOut = simplex2Base64Duplex(pdfIn)
         writeResponse(pdfOut, output)
     }
 
@@ -32,16 +32,16 @@ class AWSLambdaHandler implements RequestStreamHandler {
         }
     }
 
-    private byte[] simplex2Duplex(byte[] simplex) {
+    private String simplex2Base64Duplex(byte[] simplex) {
         def serviceOut = new ByteArrayOutputStream()
         service.simplex2Duplex(new ByteArrayInputStream(simplex), serviceOut)
-        serviceOut.toByteArray()
+        base64Encoder.encodeToString(serviceOut.toByteArray())
     }
 
-    private void writeResponse(byte[] duplex, OutputStream target) {
+    private void writeResponse(String duplex, OutputStream target) {
         def apiGatewayResponse = JsonOutput.toJson([
                 'headers': ['content-type': 'application/pdf'],
-                'body'   : base64Encoder.encodeToString(duplex),
+                'body'   : duplex,
                 'isBase64Encoded': true
         ])
         def writer = new OutputStreamWriter(target)
