@@ -11,7 +11,7 @@ task asGroovyScript(type: Zip) {
 
     from layout.projectDirectory.file('src/main/groovy')
     from layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
-    archiveFileName = "${project.name}-groovy-script-${project.version}.zip"
+    archiveAppendix = 'groovy-script'
 }
 
 task asAwsLambda(type: Zip) {
@@ -22,7 +22,7 @@ task asAwsLambda(type: Zip) {
     into('lib') {
         from configurations.runtimeClasspath
     }
-    archiveFileName = "${project.name}-aws-lambda-${project.version}.zip"
+    archiveAppendix = 'aws-lambda'
 }
 
 repositories {
