@@ -34,4 +34,35 @@ cd your-installation-folder
 cat ~/your-simplex-scan | groovy simplex-2-duplex.groovy > your-duplex-scan.pdf 
 ```
 
- 
+### As AWS Lambda
+
+Not so useful, because you can not upload more than 6 MB of data to an AWS Lamba. But fun.
+
+#### Build and deploy
+
+1. Build the deployment package
+
+```
+./gradlew asAwsLambda
+```
+
+2. Create an aws lambda function with the deployment package in build/distributions
+
+* Runtime: Java 11 (Corretto)
+* Handler: de.kieseltaucher.duplex.foreverybody.app.aws.AWSLambdaHandler::handleRequest
+
+3. Add an API Gateway Trigger
+
+* Type: REST
+* Binary Media Types: `*/*`
+
+Make a note of the api endpoint that this step created.
+
+#### Usage
+
+```
+curl -X POST your-api-endpoint \
+     -H 'content-type: application/pdf' 
+     --data-binary '@your-simplex-scan.pdf' \
+     > my-duplex-scan.pdf
+```
