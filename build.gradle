@@ -14,6 +14,24 @@ task asGroovyScript(type: Zip) {
     archiveAppendix = 'groovy-script'
 }
 
+task asAwsLambdaApp(type: Zip) {
+    description 'Creates an aws lambda deployment package without libs (see awsLambdaLibLayer)'
+    group 'distribution'
+
+    from compileGroovy
+    archiveAppendix = 'aws-lambda-app'
+}
+
+task awsLambdaLibLayer(type: Zip) {
+    description 'Creates an aws lambda deployment package containing the lib layer'
+    group 'distribution'
+
+    into('java/lib') {
+        from configurations.runtimeClasspath
+    }
+    archiveAppendix = 'aws-lambda-lib-layer'
+}
+
 task asAwsLambda(type: Zip) {
     description 'Creates an aws lambda deployment package'
     group 'distribution'
@@ -22,7 +40,7 @@ task asAwsLambda(type: Zip) {
     into('lib') {
         from configurations.runtimeClasspath
     }
-    archiveAppendix = 'aws-lambda'
+    archiveAppendix = 'aws-lambda-all'
 }
 
 repositories {
