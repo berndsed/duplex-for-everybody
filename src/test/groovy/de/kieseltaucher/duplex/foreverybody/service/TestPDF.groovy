@@ -8,6 +8,10 @@ import org.apache.pdfbox.text.PDFTextStripper
 
 class TestPDF {
 
+    static InputStream empty() {
+        new TestPDF().binary()
+    }
+
     private PDDocument document = new PDDocument()
 
     OutputStream loader() {
