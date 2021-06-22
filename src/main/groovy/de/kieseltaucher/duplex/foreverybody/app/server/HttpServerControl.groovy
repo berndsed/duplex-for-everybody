@@ -21,6 +21,7 @@ class HttpServerControl {
         }
 
         println "Starting http server listening on port ${port}"
+
         server = HttpServer.create(new InetSocketAddress(port), 0)
         executorService = Executors.newCachedThreadPool()
         server.with {
@@ -28,6 +29,7 @@ class HttpServerControl {
             setExecutor(executorService)
             start()
         }
+
         println "Http server started"
         println "POST to http://localhost:${port}/simplex-2-duplex in order to convert pdfs"
     }
