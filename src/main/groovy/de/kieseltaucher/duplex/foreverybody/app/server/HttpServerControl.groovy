@@ -29,7 +29,7 @@ class HttpServerControl {
             start()
         }
         println "Http server started"
-        println "Post to http://localhost:${port}/simplex-2-duplex"
+        println "POST to http://localhost:${port}/simplex-2-duplex in order to convert pdfs"
     }
 
     void stop() {
@@ -42,13 +42,17 @@ class HttpServerControl {
         server = null
         executorService = null
 
-        println "Stopping http server"
-        toStop.stop(3)
-        println "Http server stopped"
+        println "Two resources to shutdown"
 
-        println "Shutting down executor service"
+        println "Stopping http server (0 of 2 shutdown)"
+        toStop.stop(3)
+        println "Http server stopped (1 of 2 shutdown)"
+
+        println "Shutting down executor service (1 of 2 shutdown)"
         toShutdown.shutdown()
-        println "Executor service shut down"
+        println "Executor service shut down (2 of 2 shutdown)"
+
+        println "Bye"
     }
 
 }
