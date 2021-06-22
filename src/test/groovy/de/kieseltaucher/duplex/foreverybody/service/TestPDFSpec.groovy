@@ -48,4 +48,15 @@ class TestPDFSpec extends Specification {
         loaded.pages() == [1]
     }
 
+    def 'can create a broken binary'() {
+        given:
+        def broken = new TestPDF().brokenBinary()
+        def loader = new TestPDF().loader()
+        when:
+        loader.write broken.bytes
+        loader.close()
+        then:
+        thrown IOException
+    }
+
 }

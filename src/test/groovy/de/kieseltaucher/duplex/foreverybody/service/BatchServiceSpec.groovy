@@ -28,6 +28,15 @@ class BatchServiceSpec extends Specification {
         simplex2Duplex() == [1, 2, 3]
     }
 
+    def 'broken input pdf'() {
+        given:
+        def broken = simplexPdf.brokenBinary()
+        when:
+        service.simplex2Duplex(broken, new ByteArrayOutputStream())
+        then:
+        thrown MalformedPDFException
+    }
+
     def simplex2Duplex() {
         def duplexPdf = new TestPDF()
         service.simplex2Duplex(simplexPdf.binary(), duplexPdf.loader())

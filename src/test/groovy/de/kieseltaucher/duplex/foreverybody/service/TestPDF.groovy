@@ -52,4 +52,14 @@ class TestPDF {
         new ByteArrayInputStream(out.toByteArray())
     }
 
+    InputStream brokenBinary() {
+        def out = new ByteArrayOutputStream()
+        document.save(out)
+        byte[] bytes = out.toByteArray()
+        for (int iter = 0; iter < bytes.length; ++iter) {
+            bytes[iter] = ~bytes[iter]
+        }
+        new ByteArrayInputStream(bytes)
+    }
+
 }
