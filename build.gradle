@@ -5,11 +5,13 @@ plugins {
 group 'de.kieseltaucher.duplex.scan.for.everybody'
 version '1.0-SNAPSHOT'
 
+def groovySource = fileTree layout.projectDirectory.file('src/main/groovy')
+
 task asGroovyScript(type: Zip) {
     description 'Creates a distribution containing a groovy script'
     group 'distribution'
 
-    from layout.projectDirectory.file('src/main/groovy')
+    from groovySource
     from layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
     archiveAppendix = 'groovy-script'
 }
@@ -41,6 +43,15 @@ task asAwsLambda(type: Zip) {
         from configurations.runtimeClasspath
     }
     archiveAppendix = 'aws-lambda-all'
+}
+
+task asGroovyStandaloneServer(type: Zip) {
+    description 'Creates a distribution with a groovy script starting a web server'
+    group 'distribution'
+
+    from groovySource
+    from layout.projectDirectory.file('distributions/groovy-standalone-server/start.groovy')
+    archiveAppendix = 'groovy-standalone-server'
 }
 
 repositories {

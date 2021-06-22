@@ -66,3 +66,34 @@ curl -X POST your-api-endpoint \
      --data-binary '@your-simplex-scan.pdf' \
      > my-duplex-scan.pdf
 ```
+
+### As standalone http server
+
+A bit nerdy.
+
+#### Build and deploy
+
+1. Build the deployment package
+
+```
+./gradlew asGroovyStandaloneServer
+unzip -d your-installation-folder build/distributions/duplex-scan-for-everybody-groovy-standalone-server-*.zip
+```
+
+### Usage
+
+Start the server in a shell (Ctrl+C will stop the server):
+```
+cd your-installation-folder
+groovy start.groovy
+```
+
+Convert a pdf:
+
+```
+curl -X POST localhost:8080/simplex-2-duplex \
+     -H 'content-type: application/pdf' 
+     --data-binary '@your-simplex-scan.pdf' \
+     > my-duplex-scan.pdf
+```
+

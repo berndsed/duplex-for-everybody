@@ -9,6 +9,7 @@ class HttpServerControl {
 
     private HttpServer server
     private ExecutorService executorService
+    private int port = 8080
 
     HttpServerControl() {
         Runtime.getRuntime().addShutdownHook { stop() }
@@ -19,8 +20,8 @@ class HttpServerControl {
             return
         }
 
-        println "Starting http server"
-        server = HttpServer.create(new InetSocketAddress(8080), 0)
+        println "Starting http server listening on port ${port}"
+        server = HttpServer.create(new InetSocketAddress(port), 0)
         executorService = Executors.newCachedThreadPool()
         server.with {
             createContext('/simplex-2-duplex', new HttpServerHandler())
@@ -28,6 +29,7 @@ class HttpServerControl {
             start()
         }
         println "Http server started"
+        println "Post to http://localhost:${port}/simplex-2-duplex"
     }
 
     void stop() {
