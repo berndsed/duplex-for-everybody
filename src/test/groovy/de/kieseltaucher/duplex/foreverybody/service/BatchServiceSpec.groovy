@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class BatchServiceSpec extends Specification {
 
-    def inputBuilder = new InputBuilder()
+    def simplexPdf = new TestPDF()
     def service = new BatchService()
 
     def 'empty'() {
@@ -14,36 +14,24 @@ class BatchServiceSpec extends Specification {
 
     def 'one page'() {
         given:
-        inputBuilder.addPage(1)
+        simplexPdf.addPage(1)
         expect:
         simplex2Duplex() == [1]
     }
 
     def 'three pages'() {
         given:
-        inputBuilder.addPage(1)
-        inputBuilder.addPage(3)
-        inputBuilder.addPage(2)
+        simplexPdf.addPage(1)
+        simplexPdf.addPage(3)
+        simplexPdf.addPage(2)
         expect:
         simplex2Duplex() == [1, 2, 3]
     }
 
     def simplex2Duplex() {
         def duplexPdf = new TestPDF()
-        service.simplex2Duplex(inputBuilder.build(), duplexPdf.loader())
+        service.simplex2Duplex(simplexPdf.binary(), duplexPdf.loader())
         return duplexPdf.pages()
     }
 }
 
-class InputBuilder {
-
-    TestPDF data = new TestPDF()
-
-    void addPage(int number) {
-        data.addPage number
-    }
-
-    InputStream build() {
-        data.binary()
-    }
-}
