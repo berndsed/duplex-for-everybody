@@ -15,6 +15,10 @@ class TestHttpExchange extends HttpExchange {
     Headers responseHeaders = new Headers()
     OutputStream responseBody = new ByteArrayOutputStream()
 
+    String getResponseBodyAsText() {
+        return new String(responseBody.toByteArray())
+    }
+
     @Override
     URI getRequestURI() {
         return null

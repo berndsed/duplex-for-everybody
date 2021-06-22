@@ -6,7 +6,7 @@ import spock.lang.Specification
 class HttpServerHandlerSpec extends Specification {
 
     def handler = new HttpServerHandler()
-    def httpExchange = new TestHttpExchange()
+    TestHttpExchange httpExchange = new TestHttpExchange()
 
     void 'converts pdf'() {
         given:
@@ -22,6 +22,7 @@ class HttpServerHandlerSpec extends Specification {
 
         then:
         httpExchange.responseCode == 200
+        httpExchange.responseHeaders.getFirst('content-type') == 'application/pdf'
         result.pages() == [1]
     }
 
@@ -39,6 +40,23 @@ class HttpServerHandlerSpec extends Specification {
         method | _
         'GET'  | _
         'PUT'  | _
+    }
+
+    void 'Client-Error when pdf is malformed'() {
+        given:
+        def pdf = new TestPDF()
+        pdf.addPage(1)
+        pdf.malformed = true
+        httpExchange.requestBody = pdf.binary()
+
+        when:
+        handler.handle(httpExchange)
+
+        then:
+        noExceptionThrown()
+        httpExchange.responseCode == 400
+        httpExchange.responseHeaders.getFirst('content-type') ==~ 'text/plain'
+        httpExchange.getResponseBodyAsText() ==~ '.*Malformed.*PDF.*'
     }
 
 }
