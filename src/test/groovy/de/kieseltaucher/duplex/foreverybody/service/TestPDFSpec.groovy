@@ -50,10 +50,11 @@ class TestPDFSpec extends Specification {
 
     def 'can create a broken binary'() {
         given:
-        def broken = new TestPDF().brokenBinary()
+        def broken = new TestPDF()
+        broken.malformed = true
         def loader = new TestPDF().loader()
         when:
-        loader.write broken.bytes
+        loader.write broken.binary().bytes
         loader.close()
         then:
         thrown IOException

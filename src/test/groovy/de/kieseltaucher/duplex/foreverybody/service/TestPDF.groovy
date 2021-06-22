@@ -13,6 +13,7 @@ class TestPDF {
     }
 
     private PDDocument document = new PDDocument()
+    boolean malformed
 
     OutputStream loader() {
         def loader = new ByteArrayOutputStream() {
@@ -47,13 +48,17 @@ class TestPDF {
     }
 
     InputStream binary() {
+        return malformed ? malformedBinary() : wellFormedBinary()
+    }
+
+    private InputStream wellFormedBinary() {
         def out = new ByteArrayOutputStream()
         document.save(out)
         new ByteArrayInputStream(out.toByteArray())
     }
 
-    InputStream brokenBinary() {
-        byte[] bytes = binary().bytes
+    private InputStream malformedBinary() {
+        byte[] bytes = wellFormedBinary().bytes
         for (int iter = 0; iter < bytes.length; ++iter) {
             bytes[iter] = ~bytes[iter]
         }
