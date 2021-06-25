@@ -6,14 +6,97 @@ group 'de.kieseltaucher.duplex.scan.for.everybody'
 version '1.0-SNAPSHOT'
 
 def groovySource = fileTree layout.projectDirectory.file('src/main/groovy')
+def groovyShellScript = file layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
 
-task asGroovyScript(type: Zip) {
-    description 'Creates a distribution containing a groovy script'
+task withGroovyScript(type: Zip) {
+    description 'Creates a distribution containing a groovy script and helper classes'
     group 'distribution'
 
     from groovySource
-    from layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
-    archiveAppendix = 'groovy-script'
+    from groovyShellScript
+    archiveAppendix = 'with-groovy-script'
+}
+
+task asGroovyScript() {
+    description 'Creates a groovy script'
+    group 'distribution'
+
+    doFirst {
+        mkdir layout.buildDirectory.file('distributions')
+    }
+
+    /*
+     * Merges classes from core and service into one executable groovy script
+     *
+     * 1. Filter and parse library classes from core and service
+     * - collects all import statements targeting libraries.
+     * - collects all code lines that are not a package declaration or an import statement 
+     * 
+     * 2. Filter and parse a skeleton groovy script
+     * - collects all grab statements
+     * - collects all import statements targeting libraries
+     * - all remaining lines are considered code lines
+     * 
+     * 3. Writes the collected statements to a file 
+     * - Grab statements
+     * - import statements
+     * - the skeleton groovy script
+     * - the classes in core and service
+     * 
+     */
+    doLast {
+        def isImportLine = (~' *import.*').asMatchPredicate()
+        def isOwnPackage = (~'.*de\\.kieseltaucher\\.duplex\\.foreverybody.*').asMatchPredicate()
+        def isCoreOrServicePackage = (~'.*de\\.kieseltaucher\\.duplex\\.foreverybody\\.(core|service)').asMatchPredicate()
+
+        def imports = new HashSet()
+        def code = []
+
+        // parse all classes in core and service
+        def libSourceLines = groovySource
+                .filter { file -> !file.isDirectory() }
+                .collect { file -> file.text.split('\n') }
+                .findAll { fileLines -> fileLines.length > 0 }
+                .findAll { fileLines -> isCoreOrServicePackage.test(fileLines[0]) }
+                .flatten()
+                .findAll { sourceLine -> !isOwnPackage.test(sourceLine) }
+        libSourceLines.each {
+            if (isImportLine.test(it)) {
+                imports.add it
+            } else {
+                code.add it
+            }
+        }
+
+        def isGrabLine = (~' *@groovy\\.lang\\.Grab\\(.*\\).*').asMatchPredicate()
+        def grabs = []
+        def scriptCode = []
+        // parse groovy script skeleton
+        groovyShellScript.text.split('\n')
+                .findAll { !isOwnPackage.test(it) }
+                .each {
+                    if (isGrabLine.test(it)) {
+                        grabs.add it
+                    } else {
+                        scriptCode.add it
+                    }
+                }
+
+        def target = layout.buildDirectory.file("distributions/simplex-2-duplex-${properties.project.version}.groovy")
+        def infoLine = "// Generated at ${java.time.LocalDate.now()} (Version ${properties.project.version})\n"
+        def targetFile = target.get().asFile
+        targetFile.with {
+            write infoLine
+            append grabs.join('\n')
+            append '\n'
+            append imports.join('\n')
+            append '\n'
+            append scriptCode.join('\n')
+            append '\n'
+            append code.join('\n')
+        }
+    }
+
 }
 
 task asAwsLambdaApp(type: Zip) {

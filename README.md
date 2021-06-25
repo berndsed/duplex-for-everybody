@@ -19,18 +19,17 @@ Prerequisites:
 
 #### Build and deploy
 
-1. Execute the gradle task 'asGroovyScript'.
-2. Unzip the zip file in build/distributions into an installation folder of your choice.
+Execute the gradle task 'asGroovyScript'.
 
 ```
 ./gradlew asGroovyScript
-unzip -d your-installation-folder build/distributions/duplex-scan-for-everybody-groovy-script-*.zip
 ```
+
+This will create a file named `simplex-2-duplex-{version}.groovy` in `build/distributions`. Copy it to a location of your choice.
 
 #### Usage
 
 ```
-cd your-installation-folder
 cat ~/your-simplex-scan | groovy simplex-2-duplex.groovy > your-duplex-scan.pdf 
 ```
 
