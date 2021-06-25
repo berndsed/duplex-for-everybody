@@ -26,14 +26,14 @@ class HttpServerHandler implements HttpHandler {
     }
 
     private void respondDuplexPdf(HttpExchange exchange) {
-        service.simplex2Duplex(new BufferedInputStream(exchange.requestBody), new ExchangeOutputStream(exchange))
+        service.simplex2Duplex new BufferedInputStream(exchange.requestBody), new ExchangeOutputStream(exchange)
     }
 
     private void respondMalformedPdf(HttpExchange exchange, MalformedPDFException e) {
         exchange.responseHeaders.set 'content-type', 'text/plain'
         def message = "Malformed PDF: ${e.getMessage()}"
         def body = message.getBytes Charsets.ISO_8859_1
-        exchange.sendResponseHeaders(400, body.length)
+        exchange.sendResponseHeaders 400, body.length
         exchange.responseBody.write body
     }
 
@@ -42,7 +42,7 @@ class HttpServerHandler implements HttpHandler {
     }
 
     private respondWrongMethod(HttpExchange exchange) {
-        exchange.sendResponseHeaders(405, -1)
+        exchange.sendResponseHeaders 405, -1
     }
 
     private static class ExchangeOutputStream extends OutputStream {
@@ -85,8 +85,8 @@ class HttpServerHandler implements HttpHandler {
 
         private OutputStream exchangeOut() {
             if (exchangeOut == null) {
-                exchange.responseHeaders.set('content-type', 'application/pdf')
-                exchange.sendResponseHeaders(200, 0)
+                exchange.responseHeaders.set 'content-type', 'application/pdf'
+                exchange.sendResponseHeaders 200, 0
                 exchangeOut = exchange.getResponseBody()
             }
             exchangeOut

@@ -22,11 +22,11 @@ class HttpServerControl {
 
         println "Starting http server listening on port ${port}"
 
-        server = HttpServer.create(new InetSocketAddress(port), 0)
+        server = HttpServer.create new InetSocketAddress(port), 0
         executorService = Executors.newCachedThreadPool()
         server.with {
-            createContext('/simplex-2-duplex', new HttpServerHandler())
-            setExecutor(executorService)
+            createContext '/simplex-2-duplex', new HttpServerHandler()
+            setExecutor executorService
             start()
         }
 
@@ -47,7 +47,7 @@ class HttpServerControl {
         println "Two resources to shutdown"
 
         println "Stopping http server (0 of 2 shutdown)"
-        toStop.stop(3)
+        toStop.stop 3
         println "Http server stopped (1 of 2 shutdown)"
 
         println "Shutting down executor service (1 of 2 shutdown)"

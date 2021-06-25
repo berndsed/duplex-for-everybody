@@ -18,12 +18,12 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     @Override
     void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-        def pdfOut = simplex2Base64Duplex(parseSimplex(input))
-        writeResponse(pdfOut, output)
+        def pdfOut = simplex2Base64Duplex parseSimplex(input)
+        writeResponse pdfOut, output
     }
 
     private byte[] parseSimplex(InputStream input) {
-        def apiGatewayRequest = parseJson(input)
+        def apiGatewayRequest = parseJson input
         def base64Body = apiGatewayRequest.get('body') as String
         base64Decoder.decode base64Body
     }
@@ -39,7 +39,7 @@ class AWSLambdaHandler implements RequestStreamHandler {
 
     private String simplex2Base64Duplex(byte[] simplex) {
         def base64Out = new ByteArrayOutputStream()
-        service.simplex2Duplex(new ByteArrayInputStream(simplex), base64Encoder.wrap(base64Out))
+        service.simplex2Duplex new ByteArrayInputStream(simplex), base64Encoder.wrap(base64Out)
         new String(base64Out.toByteArray(), ISO_8859_1)
     }
 
@@ -50,7 +50,7 @@ class AWSLambdaHandler implements RequestStreamHandler {
                 'isBase64Encoded': true
         ])
         def writer = new OutputStreamWriter(target)
-        writer.write(apiGatewayResponse)
+        writer.write apiGatewayResponse
         writer.close()
     }
 
