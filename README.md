@@ -68,23 +68,23 @@ curl -X POST your-api-endpoint \
 
 ### As standalone http server
 
-A bit nerdy.
+A bit nerdy. This distribution can be hosted as web worker, e.g. at Heroku or any other PaaS-Provider.
+
+Requirements: Java 11
 
 #### Build and deploy
 
 1. Build the deployment package
 
 ```
-./gradlew asGroovyStandaloneServer
-unzip -d your-installation-folder build/distributions/duplex-scan-for-everybody-groovy-standalone-server-*.zip
+./gradlew asStandaloneServer
 ```
 
 ### Usage
 
 Start the server in a shell (Ctrl+C will stop the server):
 ```
-cd your-installation-folder
-groovy start.groovy
+java -jar build/distribution/duplex-scan-for-everybody-{version}.jar
 ```
 
 Convert a pdf:

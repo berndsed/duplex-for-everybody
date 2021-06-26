@@ -7,6 +7,11 @@ import java.util.concurrent.Executors
 
 class HttpServerControl {
 
+    static void main(String[] args) {
+        def control = new HttpServerControl()
+        control.start()
+    }
+
     private HttpServer server
     private ExecutorService executorService
     private int port = 8080

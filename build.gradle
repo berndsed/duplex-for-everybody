@@ -1,5 +1,8 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'groovy'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 group 'de.kieseltaucher.duplex.scan.for.everybody'
@@ -25,6 +28,12 @@ configurations {
         canBeConsumed = false
     }
     awsRuntime.extendsFrom aws, service
+
+    serviceRuntime {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    serviceRuntime.extendsFrom service
 }
 
 dependencies {
@@ -158,11 +167,16 @@ task asAwsLambda(type: Zip) {
     archiveAppendix = 'aws-lambda-all'
 }
 
-task asGroovyStandaloneServer(type: Zip) {
-    description 'Creates a distribution with a groovy script starting a web server'
+task asStandaloneServer(type: ShadowJar) {
+    description 'Creates a distribution with an executable uber jar starting a web server'
     group 'distribution'
 
-    from groovySource
-    from layout.projectDirectory.file('distributions/groovy-standalone-server/start.groovy')
-    archiveAppendix = 'groovy-standalone-server'
+    manifest {
+        attributes 'Main-Class': 'de.kieseltaucher.duplex.foreverybody.app.server.HttpServerControl'
+    }
+
+    from compileGroovy
+    configurations = [project.configurations.serviceRuntime]
+    destinationDirectory = layout.buildDirectory.dir('distribution')
+    archiveAppendix = 'standalone-server'
 }
