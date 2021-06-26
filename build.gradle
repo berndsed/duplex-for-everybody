@@ -9,11 +9,29 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    aws {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+    service {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+    implementation.extendsFrom aws, service
+    
+    awsRuntime {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    awsRuntime.extendsFrom aws, service
+}
+
 dependencies {
-    implementation 'org.codehaus.groovy:groovy:2.5.8'
-    implementation 'org.codehaus.groovy:groovy-json:2.5.8'
-    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    service 'org.codehaus.groovy:groovy:2.5.8'
+    service 'org.codehaus.groovy:groovy-json:2.5.8'
+    service 'org.apache.pdfbox:pdfbox:2.0.24'
+    aws 'com.amazonaws:aws-lambda-java-core:1.2.1'
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
 }
 
@@ -124,7 +142,7 @@ task awsLambdaLibLayer(type: Zip) {
     group 'distribution'
 
     into('java/lib') {
-        from configurations.runtimeClasspath
+        from configurations.awsRuntime
     }
     archiveAppendix = 'aws-lambda-lib-layer'
 }
@@ -135,7 +153,7 @@ task asAwsLambda(type: Zip) {
 
     from compileGroovy
     into('lib') {
-        from configurations.runtimeClasspath
+        from configurations.awsRuntime
     }
     archiveAppendix = 'aws-lambda-all'
 }
