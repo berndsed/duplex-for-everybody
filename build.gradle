@@ -47,15 +47,6 @@ dependencies {
 def groovySource = fileTree layout.projectDirectory.file('src/main/groovy')
 def groovyShellScript = file layout.projectDirectory.file('distributions/groovy-script/simplex2duplex.groovy')
 
-task withGroovyScript(type: Zip) {
-    description 'Creates a distribution containing a groovy script and helper classes'
-    group 'distribution'
-
-    from groovySource
-    from groovyShellScript
-    archiveAppendix = 'with-groovy-script'
-}
-
 task asGroovyScript() {
     description 'Creates a groovy script'
     group 'distribution'
