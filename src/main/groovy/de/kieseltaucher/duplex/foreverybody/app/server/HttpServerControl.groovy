@@ -7,16 +7,20 @@ import java.util.concurrent.Executors
 
 class HttpServerControl {
 
+    private static final int DEFAULT_PORT = 8080
+
     static void main(String[] args) {
-        def control = new HttpServerControl()
+        def params = new HttpCli().parse(args)
+        def control = new HttpServerControl(params)
         control.start()
     }
 
     private HttpServer server
     private ExecutorService executorService
-    private int port = 8080
+    private int port
 
-    HttpServerControl() {
+    HttpServerControl(Params params) {
+        this.port = params.port() > 0 ? params.port() : DEFAULT_PORT
         Runtime.getRuntime().addShutdownHook { stop() }
     }
 

@@ -87,6 +87,9 @@ Start the server in a shell (Ctrl+C will stop the server):
 java -jar build/distribution/duplex-scan-for-everybody-{version}.jar
 ```
 
+This will start an http server listening on port 8080.
+In order to change the port to e.g. 5000, use `java java -jar build/distribution/duplex-scan-for-everybody-{version}.jar --port 5000`
+
 Convert a pdf:
 
 ```
