@@ -10,9 +10,14 @@ class HttpServerControl {
     private static final int DEFAULT_PORT = 8080
 
     static void main(String[] args) {
-        def params = new HttpCli().parse(args)
-        def control = new HttpServerControl(params)
-        control.start()
+        def cli = new HttpCli()
+        def params = cli.parse(args)
+        if (params.help()) {
+            cli.usage()
+        } else {
+            def control = new HttpServerControl(params)
+            control.start()
+        }
     }
 
     private HttpServer server
