@@ -83,7 +83,7 @@ task asGroovyScript() {
     doLast {
         def isImportLine = (~' *import.*').asMatchPredicate()
         def isOwnPackage = (~'.*de\\.kieseltaucher\\.duplex\\.foreverybody.*').asMatchPredicate()
-        def isCoreOrServicePackage = (~'.*de\\.kieseltaucher\\.duplex\\.foreverybody\\.(core|service)').asMatchPredicate()
+        def isCoreOrServicePackage = (~'.*de\\.kieseltaucher\\.duplex\\.foreverybody\\.(core|service|app\\.script)').asMatchPredicate()
 
         def imports = new HashSet()
         def code = []

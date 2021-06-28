@@ -33,6 +33,11 @@ This will create a file named `simplex-2-duplex-{version}.groovy` in `build/dist
 cat ~/your-simplex-scan | groovy simplex-2-duplex.groovy > your-duplex-scan.pdf 
 ```
 
+Or to transform a file in place
+```
+groovy simplex-2-duplex.groovy your-scan.pdf
+```
+
 ### As AWS Lambda
 
 Not so useful, because you can not upload more than 6 MB of data to an AWS Lamba. But fun.
