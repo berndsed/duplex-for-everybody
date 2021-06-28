@@ -4,7 +4,7 @@ import picocli.CommandLine
 
 import java.util.function.Consumer
 
-@CommandLine.Command(name = 'groovy simplex-2-duplex.groovy')
+@CommandLine.Command(name = 'groovy simplex-2-duplex')
 class ScriptCli implements Runnable {
 
     @CommandLine.Parameters(arity = '0..1', description = "file to convert")

@@ -25,17 +25,17 @@ Execute the gradle task 'asGroovyScript'.
 ./gradlew asGroovyScript
 ```
 
-This will create a file named `simplex-2-duplex-{version}.groovy` in `build/distributions`. Copy it to a location of your choice.
+This will create a file named `simplex-2-duplex-{version}` in `build/distributions`. Copy it to a location of your choice.
 
 #### Usage
 
 ```
-cat ~/your-simplex-scan | groovy simplex-2-duplex.groovy > your-duplex-scan.pdf 
+cat ~/your-simplex-scan | groovy simplex-2-duplex > your-duplex-scan.pdf 
 ```
 
 Or to transform a file in place
 ```
-groovy simplex-2-duplex.groovy your-scan.pdf
+groovy simplex-2-duplex your-scan.pdf
 ```
 
 ### As AWS Lambda

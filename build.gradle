@@ -118,7 +118,7 @@ task asGroovyScript() {
                     }
                 }
 
-        def target = layout.buildDirectory.file("distribution/simplex-2-duplex-${properties.project.version}.groovy")
+        def target = layout.buildDirectory.file("distribution/simplex-2-duplex-${properties.project.version}")
         def infoLine = "// Generated at ${java.time.LocalDate.now()} (Version ${properties.project.version})\n"
         def targetFile = target.get().asFile
         targetFile.with {
