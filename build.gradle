@@ -58,7 +58,7 @@ task asGroovyScript() {
     group 'distribution'
 
     doFirst {
-        mkdir layout.buildDirectory.file('distributions')
+        mkdir layout.buildDirectory.file('distribution')
     }
 
     /*
@@ -118,7 +118,7 @@ task asGroovyScript() {
                     }
                 }
 
-        def target = layout.buildDirectory.file("distributions/simplex-2-duplex-${properties.project.version}.groovy")
+        def target = layout.buildDirectory.file("distribution/simplex-2-duplex-${properties.project.version}.groovy")
         def infoLine = "// Generated at ${java.time.LocalDate.now()} (Version ${properties.project.version})\n"
         def targetFile = target.get().asFile
         targetFile.with {
